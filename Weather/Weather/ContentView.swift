@@ -9,8 +9,27 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        VStack {
+            ForEach(0 ..< 7) {_ in
+                WeatherRecordView()
+            }
+        }.padding()
+    }
+}
+
+struct WeatherRecordView: View {
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 25.0).stroke()
+            HStack {
+                Text("☀")
+                    .font(.largeTitle)
+                VStack {
+                    Text("Kraków")
+                    Text("Temperature: 27℃").font(.caption)
+                }
+            }
+        }
     }
 }
 
