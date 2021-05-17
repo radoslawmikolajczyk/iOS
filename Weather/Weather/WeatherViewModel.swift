@@ -8,13 +8,13 @@
 import Foundation
 
 class WeatherViewModel: ObservableObject {
-    @Published private(set) var model: WeatherModel = WeatherModel(cities: ["London", "Paris", "Prague", "Tokyo", "New York", "Berlin", "Warsaw"])
+    @Published private(set) var model: WeatherModel = WeatherModel(cities: ["London", "Paris", "Prague", "Tokyo", "New York", "Berlin", "Warsaw", "Cracow", "Chicago"])
     
     var records: Array<WeatherModel.WeatherRecord> {
         model.records
     }
     
-    func refresh(record: WeatherModel.WeatherRecord) {
-        model.refresh(record: record)
+    func refresh(record: WeatherModel.WeatherRecord, counter: Int) {
+        model.refresh(record: record, counter: counter)
     }
 }
