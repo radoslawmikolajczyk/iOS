@@ -10,7 +10,6 @@ import Foundation
 struct WeatherModel {
     
     var records: Array<WeatherRecord> = []
-    var icons = ["Snow": "❄️", "Sleet": "❄️", "Hail": "🌨", "Thunderstorm": "⛈", "Heavy Rain": "🌧", "Light Rain": "🌧", "Showers": "🌦", "Heavy Cloud": "☁️", "Light Cloud": "🌥", "Clear":"☀️"] 
     
     init(cities: Array<String>) {
         records = Array<WeatherRecord>()
@@ -27,9 +26,9 @@ struct WeatherModel {
         var humidity: Float = Float.random(in: 0 ... 100)
         var windSpeed: Float = Float.random(in: 0 ... 20)
         var windDirection: Float = Float.random(in: 0 ..< 360)
-        var description: String = "Temperature 0℃" //recordDescription
-        var lat: Double = 50  //latitude
-        var long: Double = 20 //longitude
+        var description: String = "Loading data..."
+        var lat: Double = 50 
+        var long: Double = 20
         var woeId: String
     }
     
@@ -57,7 +56,6 @@ struct WeatherModel {
         records[ind!].description = descr[counter]
     }
     
-    //refreshRealData
     mutating func refreshFromApi(woeId: String, counter: Int, response: MetaWeatherResponse, locName: String) {
         let ind = records.firstIndex(where: {$0.woeId==woeId})
         let location = response.lattLong.components(separatedBy: ",")
@@ -71,9 +69,9 @@ struct WeatherModel {
         records[ind!].lat = Double(location[0])!
         records[ind!].long = Double(location[1])!
         records[ind!].weatherState = response.consolidatedWeather[0].weatherStateName
-        records[ind!].temperature = round(Float(response.consolidatedWeather[0].theTemp)*100)/100
-        records[ind!].humidity = round(Float(response.consolidatedWeather[0].humidity)*100)/100
-        records[ind!].windSpeed = round(Float(response.consolidatedWeather[0].windSpeed)*100)/100
+        records[ind!].temperature = round(Float(response.consolidatedWeather[0].theTemp)*10)/10
+        records[ind!].humidity = round(Float(response.consolidatedWeather[0].humidity)*10)/10
+        records[ind!].windSpeed = round(Float(response.consolidatedWeather[0].windSpeed)*10)/10
         let descr = ["Temperature: \(records[ind!].temperature)℃", "Humidity: \(records[ind!].humidity)%", "Wind Speed: \(records[ind!].windSpeed) km/h"]
         records[ind!].description = descr[counter]
     }

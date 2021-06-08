@@ -28,7 +28,6 @@ struct ContentView: View {
 struct WeatherRecordView: View {
     var record: WeatherModel.WeatherRecord
     var viewModel: WeatherViewModel
-    var condDescr = ["Snow": "❄️", "Sleet": "❄️", "Hail": "🌨", "Thunderstorm": "⛈", "Heavy Rain": "🌧", "Light Rain": "🌧", "Showers": "🌦", "Heavy Cloud": "☁️", "Light Cloud": "🌥", "Clear":"☀️"]
     
     @State var counter: Int = 0
     @State var paramText = Text("Click on City")
@@ -50,7 +49,7 @@ struct WeatherRecordView: View {
             RoundedRectangle(cornerRadius: cornerRadius).stroke()
             HStack {
                 //ustalenie wielkosci ikonki jako 60
-                Text("\(condDescr[record.weatherState]!)").font(.system(size: iconSize))
+                refreshIcon(record: record).font(.system(size: iconSize))
                 //wyrownanie pojedynczej komorki do lewej strony ramki
                 VStack (alignment: .leading) {
                     //dodanie spacera w celu obnizenia nazwy miasta
@@ -90,7 +89,7 @@ struct WeatherRecordView: View {
                     .frame(alignment: .trailing)
                     .sheet(isPresented: $showingSheet, content: {
                         VStack {
-                            Text("Map")
+                            Text("\(record.cityName)")
                         }
                         Map(coordinateRegion: $region, annotationItems: [Loc(coord: .init(latitude: record.lat, longitude: record.long))]){
                             place in MapPin(coordinate: place.coord)
@@ -119,25 +118,25 @@ struct WeatherRecordView: View {
     
     func refreshIcon(record:WeatherModel.WeatherRecord) -> Text {
         switch (record.weatherState){
-        case "c":
+        case "Clear":
             return Text("☀")
-        case "lc":
+        case "Light Cloud":
             return Text("🌤")
-        case "hc":
+        case "Heavy Cloud":
             return Text("☁️")
-        case "s":
+        case "Showers":
             return Text("🌦")
-        case "lr":
+        case "Light Rain":
             return Text("🌧")
-        case "hr":
+        case "Heavy Rain":
             return Text("🌧")
-        case "t":
+        case "Thunderstorm":
             return Text("⛈")
-        case "h":
+        case "Hail":
             return Text("🌧")
-        case "sl":
+        case "Sleet":
             return Text("🌧")
-        case "sn":
+        case "Snow":
             return Text("🌨")
         default:
             return Text("☀")

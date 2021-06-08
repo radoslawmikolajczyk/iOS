@@ -17,17 +17,14 @@ class WeatherViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var currLocation: CLLocation?
     @Published var currLocName: String
     private var cancellables: Set<AnyCancellable> = []
-    private var fetcher: MetaWeatherFetcher
-    private let locationManager: CLLocationManager
-    private let locFetcher: LocationFetcher
+    private var fetcher = MetaWeatherFetcher()
+    private var locationManager = CLLocationManager()
+    private var locFetcher = LocationFetcher()
     var records: Array<WeatherModel.WeatherRecord> {
         model.records
     }
     
     override init() {
-        fetcher = MetaWeatherFetcher()
-        locFetcher = LocationFetcher()
-        locationManager = CLLocationManager()
         locationManager.requestWhenInUseAuthorization()
         currLocName = "Cracow"
         super.init()
@@ -53,13 +50,13 @@ class WeatherViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
                 .sink(receiveCompletion: {_ in }, receiveValue: { locationValue in
                             self.fetcher.forecast(forId: String(locationValue[0].woeid))
                                 .sink(receiveCompletion: {_ in}, receiveValue: {
-                                    [self]value in
-                                    self.model.refreshFromApi(woeId: record.woeId, counter: counter, response: value, locName: currLocName)
+                                    value in
+                                    self.model.refreshFromApi(woeId: record.woeId, counter: counter, response: value, locName: self.currLocName)
                                 }).store(in: &self.cancellables)
                 }).store(in: &cancellables)
         } else {
             fetcher.forecast(forId: woeId)
-                .sink(receiveCompletion: {_ in}, receiveValue: { [self]value in
+                .sink(receiveCompletion: {_ in}, receiveValue: { value in
                     self.model.refreshFromApi(woeId: woeId, counter: counter, response: value, locName: "")
                 }).store(in: &cancellables)
         }
