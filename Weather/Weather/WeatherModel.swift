@@ -30,6 +30,14 @@ struct WeatherModel {
         var lat: Double = 50 
         var long: Double = 20
         var woeId: String
+        //Do dodania w navigation view
+        var airPressure: Double = 1025.0
+        var predictability: Double = 50.0
+        var visibility: Double = 14.0
+        var applicableDate: String = "2021-06-09"
+        var minTemp: Double = 14.2
+        var maxTemp: Double = 20.0
+        var windDirectionCompass: String = "W"
     }
     
     mutating func refresh(record: WeatherRecord, counter: Int) {
@@ -74,5 +82,12 @@ struct WeatherModel {
         records[ind!].windSpeed = round(Float(response.consolidatedWeather[0].windSpeed)*10)/10
         let descr = ["Temperature: \(records[ind!].temperature)℃", "Humidity: \(records[ind!].humidity)%", "Wind Speed: \(records[ind!].windSpeed) km/h"]
         records[ind!].description = descr[counter]
+        records[ind!].airPressure = round(Double(response.consolidatedWeather[0].airPressure)*10)/10
+        records[ind!].predictability = round(Double(response.consolidatedWeather[0].predictability)*10)/10
+        records[ind!].visibility = round(Double(response.consolidatedWeather[0].visibility)*16.0934)/10
+        records[ind!].applicableDate = response.consolidatedWeather[0].applicableDate
+        records[ind!].minTemp = round(Double(response.consolidatedWeather[0].minTemp)*10)/10
+        records[ind!].maxTemp = round(Double(response.consolidatedWeather[0].maxTemp)*10)/10
+        records[ind!].windDirectionCompass = response.consolidatedWeather[0].windDirectionCompass
     }
 }

@@ -15,14 +15,17 @@ struct ContentView: View {
     
     var body: some View {
         //Dodanie scrollowania pionowego
-        ScrollView(.vertical){
-            VStack {
-                ForEach(viewModel.records) {record in
-                    WeatherRecordView(record: record, viewModel: viewModel)
-                }
-            }.padding()
+        NavigationView {
+            ScrollView(.vertical){
+                VStack {
+                    ForEach(viewModel.records) {record in
+                        WeatherRecordView(record: record, viewModel: viewModel)
+                    }
+                }.padding()
+            }.navigationBarHidden(true)
         }
     }
+    
 }
 
 struct WeatherRecordView: View {
@@ -58,7 +61,7 @@ struct WeatherRecordView: View {
                     //wyrowananie nazwy miasta oraz parametru do lewej strony
                     //teksty zostaly odseparowane od siebie dzieki czemu nie ma juz efektu poruszajacej sie nazwy miasta w momencie zmiany wyswietlanego parametru
                     GeometryReader { geometry in
-                        Text(record.cityName).font(.headline)
+                        Text(record.cityName).font(.subheadline)
                             .onTapGesture {
                                 self.counter += 1
                                 if self.counter > 2 {
@@ -73,7 +76,7 @@ struct WeatherRecordView: View {
                 }
                 
                 Text("🔄")
-                    .font(.largeTitle)
+                    .font(.title)
                     .onTapGesture {
                         if self.counter > 2 {
                             self.counter = 0
@@ -81,7 +84,7 @@ struct WeatherRecordView: View {
                         viewModel.refresh(record: record, counter: self.counter)
                     }
                 Text("🗺")
-                    .font(.largeTitle)
+                    .font(.title)
                     .onTapGesture {
                         updateRegion()
                         showingSheet = true
@@ -95,6 +98,11 @@ struct WeatherRecordView: View {
                             place in MapPin(coordinate: place.coord)
                         }
                         .onAppear(perform: updateRegion)
+                    })
+                NavigationLink(
+                    destination: WeatherNavigationView(record: record),
+                    label: {
+                        Text(">")
                     })
             }
         }.frame(width: recordViewWidth, height: recordViewHeight)
